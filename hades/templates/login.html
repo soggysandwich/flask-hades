@@ -7,12 +7,12 @@ Login
 
 
 <div class="w-50 container">
-    <form method="POST" , class="form-register" ,style="color:white">
+    <form method="POST"  class="form-register"  style="color:white">
         {{ form.hidden_tag()}}
         <h2 class="h3 mb-3 font-weight-normal text-center" ></h2>
 
         {{ form.username.label() }}
-        {{ form.username(class="form-control", placeholder="User Name") }}
+        {{ form.username(class="form-control", placeholder="UserName") }}
 
         {{ form.password.label() }}
         {{ form.password(class="form-control", placeholder="Password") }}
