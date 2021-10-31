@@ -1,5 +1,5 @@
 from hades import app,db
-from flask import render_template, redirect, url_for
+from flask import render_template, redirect, url_for, flash
 from hades.model import Advert, User
 from hades.forms import RegisterForm, KeywordsForm
 
@@ -26,7 +26,7 @@ def register():
         return redirect(url_for('list_adverts'))
     if form.errors != {}:
         for err_msg in form.errors.values():
-            print(f'there was an error: {err_msg}')
+            flash(f'There was an error on the form: {err_msg}',category='danger')
 
     return render_template('register.html', form=form)
 
