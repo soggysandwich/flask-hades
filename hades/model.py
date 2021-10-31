@@ -1,4 +1,4 @@
-from hades import db
+from hades import db, bcrypt
 
 
 class User(db.Model):
@@ -6,6 +6,14 @@ class User(db.Model):
     user = db.Column(db.String(length=30), nullable=False, unique=True)
     email_address = db.Column(db.String(length=100), nullable=False, unique=True)
     password_hash = db.Column(db.String(length=60), nullable=False)
+
+    @property
+    def password(self):
+        return self.password_hash
+
+    @password.setter
+    def password(self, plain_text_pw):
+        self.password_hash = bcrypt.generate_password_hash(plain_text_pw).decode('utf-8')
 
 
 class Seller(db.Model):

@@ -17,7 +17,7 @@ def register():
         user_create = User(
             user=form.username.data,
             email_address=form.email_address.data,
-            password_hash=form.password1.data
+            password=form.password1.data
         )
 
         db.session.add(user_create)
