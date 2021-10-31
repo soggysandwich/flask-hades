@@ -1,7 +1,7 @@
-from hades import app,db
+from hades import app, db
 from flask import render_template, redirect, url_for, flash
 from hades.model import Advert, User
-from hades.forms import RegisterForm, KeywordsForm
+from hades.forms import RegisterForm, KeywordsForm, LoginForm
 
 
 @app.route('/')
@@ -10,7 +10,7 @@ def home():
     return render_template('home.html')
 
 
-@app.route('/register', methods=["GET","POST"])
+@app.route('/register', methods=["GET", "POST"])
 def register():
     form = RegisterForm()
     if form.validate_on_submit():
@@ -26,9 +26,18 @@ def register():
         return redirect(url_for('list_adverts'))
     if form.errors != {}:
         for err_msg in form.errors.values():
-            flash(f'There was an error on the form: {err_msg}',category='danger')
+            flash(f'There was an error on the form: {err_msg}', category='danger')
 
     return render_template('register.html', form=form)
+
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        pass
+
+    return render_template('login.html', form=form)
 
 
 @app.route('/adverts')

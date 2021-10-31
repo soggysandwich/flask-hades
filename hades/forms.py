@@ -27,3 +27,8 @@ class KeywordsForm(FlaskForm):
     keyword1 = StringField(label='Search Keyword')
     keyword2 = StringField(label='Second Search Keyword')
     submit = SubmitField(label='Search')
+
+class LoginForm(FlaskForm):
+    username=StringField(label='User Name',validators=[DataRequired()])
+    password=PasswordField(label='Password',validators=[DataRequired()])
+    submit = SubmitField(label='Login')
