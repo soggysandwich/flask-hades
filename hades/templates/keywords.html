@@ -1,8 +1,27 @@
 {% extends 'base.html' %}
 {% block title %}
-    Keywords
+Keywords
 {% endblock %}
 
 {% block content %}
-    <h1>Keywords search terms</h1>
+<div class="w-50 container-sm">
+
+        <form method="POST" , class="form-register" ,style="color:white">
+
+            <h2 class="h3 mb-3 font-weight-normal text-center">Create keywords for searching</h2>
+            <br>
+
+            {{ form.keyword1(class="form-control", placeholder="Search Keyword") }}
+            <br>
+
+            {{ form.keyword2(class="form-control", placeholder="Search keyword 2") }}
+
+            <br>
+            <div class= "col text-center ">
+                {{ form.submit(class="btn btn-default btn-primary")}}
+            </div>
+        </form>
+
+</div>
+
 {% endblock %}

@@ -1,12 +1,34 @@
-from hades import app
-from flask import render_template
-from hades.model import Advert
+from hades import app,db
+from flask import render_template, redirect, url_for
+from hades.model import Advert, User
+from hades.forms import RegisterForm, KeywordsForm
 
 
 @app.route('/')
 @app.route('/home')
 def home():
     return render_template('home.html')
+
+
+@app.route('/register', methods=["GET","POST"])
+def register():
+    form = RegisterForm()
+    if form.validate_on_submit():
+        user_create = User(
+            user=form.username.data,
+            email_address=form.email_address.data,
+            password_hash=form.password1.data
+        )
+
+        db.session.add(user_create)
+        db.session.commit()
+
+        return redirect(url_for('list_adverts'))
+    if form.errors != {}:
+        for err_msg in form.errors.values():
+            print(f'there was an error: {err_msg}')
+
+    return render_template('register.html', form=form)
 
 
 @app.route('/adverts')
@@ -17,5 +39,5 @@ def list_adverts():
 
 @app.route('/keywords')
 def keywords():
-    return render_template('keywords.html')
-
+    form = KeywordsForm()
+    return render_template('keywords.html', form=form)
