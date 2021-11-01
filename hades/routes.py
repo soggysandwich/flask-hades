@@ -2,7 +2,7 @@ from hades import app, db
 from flask import render_template, redirect, url_for, flash
 from hades.model import Advert, User
 from hades.forms import RegisterForm, KeywordsForm, LoginForm
-from flask_login import login_user,logout_user
+from flask_login import login_user,logout_user, login_required
 
 @app.route('/')
 @app.route('/home')
@@ -22,6 +22,9 @@ def register():
 
         db.session.add(user_create)
         db.session.commit()
+
+        login_user(user_create)
+        flash(f'Account created successfully , you are logged in as {user_create.user}',category='success')
 
         return redirect(url_for('list_adverts'))
     if form.errors != {}:
@@ -47,6 +50,7 @@ def login():
 
 
 @app.route('/adverts')
+@login_required
 def list_adverts():
     advert_list = Advert.query.all()
     return render_template('adverts.html', advert_list=advert_list)

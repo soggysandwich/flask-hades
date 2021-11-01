@@ -11,5 +11,7 @@ app.config['SECRET_KEY'] = '90ef207dd27760040e6d30bf'
 bcrypt = Bcrypt(app)
 db = SQLAlchemy(app)
 login_manager=LoginManager(app)
+login_manager.login_view='login'
+login_manager.login_message_category= 'info'
 
 from hades import routes
