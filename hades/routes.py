@@ -2,7 +2,7 @@ from hades import app, db
 from flask import render_template, redirect, url_for, flash
 from hades.model import Advert, User
 from hades.forms import RegisterForm, KeywordsForm, LoginForm
-
+from flask_login import login_user
 
 @app.route('/')
 @app.route('/home')
@@ -35,7 +35,13 @@ def register():
 def login():
     form = LoginForm()
     if form.validate_on_submit():
-        pass
+        attempted_user=User.query.filter_by(user=form.username.data).first()
+        if attempted_user and attempted_user.check_password(password_to_check=form.password.data):
+                login_user(attempted_user)
+                flash(f'Logged in as {attempted_user.user}',category='success')
+                return redirect(url_for('list_adverts'))
+        else:
+            flash(f'Login failed , Please check user or password is correct', category='danger')
 
     return render_template('login.html', form=form)
 
@@ -50,3 +56,7 @@ def list_adverts():
 def keywords():
     form = KeywordsForm()
     return render_template('keywords.html', form=form)
+
+@app.route('/logout')
+def logout():
+    pass
