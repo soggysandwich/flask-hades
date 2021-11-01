@@ -2,7 +2,7 @@ from hades import app, db
 from flask import render_template, redirect, url_for, flash
 from hades.model import Advert, User
 from hades.forms import RegisterForm, KeywordsForm, LoginForm
-from flask_login import login_user
+from flask_login import login_user,logout_user
 
 @app.route('/')
 @app.route('/home')
@@ -59,4 +59,6 @@ def keywords():
 
 @app.route('/logout')
 def logout():
-    pass
+    logout_user()
+    flash('You have been logged out', category='info')
+    return redirect(url_for('home'))
