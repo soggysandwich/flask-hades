@@ -1,8 +1,13 @@
+import os
 from hades import app, db
 from flask import render_template, redirect, url_for, flash
 from hades.model import Advert, User
 from hades.forms import RegisterForm, KeywordsForm, LoginForm
 from flask_login import login_user,logout_user, login_required
+from google.cloud import pubsub_v1
+
+credential_path= '/home/me/Projects/flask-hades/hades/scripts/hades-privatekey-publisher-serviceaccount.json'
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = credential_path
 
 @app.route('/')
 @app.route('/home')
@@ -56,9 +61,23 @@ def list_adverts():
     return render_template('adverts.html', advert_list=advert_list)
 
 
-@app.route('/keywords')
+@app.route('/keywords',methods=["GET", "POST"])
+@login_required
 def keywords():
     form = KeywordsForm()
+    if form.validate_on_submit():
+        data=form.keyword1.data
+        data = data.encode('utf-8')
+
+        publisher = pubsub_v1.PublisherClient()
+        topic = 'projects/hades-cloud-330810/topics/search-keywords'
+
+        result = publisher.publish(topic, data)
+        flash(f'Keywords scheduled to search ebay, your id is { result.result() }'
+                ,category='info')
+
+        return redirect(url_for('list_adverts'))
+
     return render_template('keywords.html', form=form)
 
 @app.route('/logout')
