@@ -66,14 +66,21 @@ def list_adverts():
 def keywords():
     form = KeywordsForm()
     if form.validate_on_submit():
-        data=form.keyword1.data
-        data = data.encode('utf-8')
+
 
         publisher = pubsub_v1.PublisherClient()
         topic = 'projects/hades-cloud-330810/topics/search-keywords'
 
-        result = publisher.publish(topic, data)
-        flash(f'Keywords scheduled to search ebay, your id is { result.result() }'
+        data = 'Search terms for Ebay API'
+        data = data.encode('utf-8')
+        attributes = {
+            'keyword1': form.keyword1.data,
+            'keyword2': form.keyword2.data
+
+        }
+
+        result = publisher.publish(topic, data, **attributes)
+        flash(f'Keywords scheduled ,your id is { result.result() }, Please refresh this page in a few minutes'
                 ,category='info')
 
         return redirect(url_for('list_adverts'))
