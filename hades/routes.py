@@ -5,6 +5,7 @@ from hades.model import Advert, User
 from hades.forms import RegisterForm, KeywordsForm, LoginForm
 from flask_login import login_user,logout_user, login_required
 from google.cloud import pubsub_v1
+import json
 
 credential_path= '/home/me/Projects/flask-hades/hades/scripts/hades-privatekey-publisher-serviceaccount.json'
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = credential_path
@@ -71,15 +72,19 @@ def keywords():
         publisher = pubsub_v1.PublisherClient()
         topic = 'projects/hades-cloud-330810/topics/search-keywords'
 
-        data = 'Search terms for Ebay API'
-        data = data.encode('utf-8')
         attributes = {
-            'keyword1': form.keyword1.data,
-            'keyword2': form.keyword2.data
+            'Keyword1':form.keyword1.data
 
         }
 
-        result = publisher.publish(topic, data, **attributes)
+        data = json.dumps(attributes)
+        print(f'dict to json string {data}')
+
+
+        data = data.encode('utf-8')
+
+
+        result = publisher.publish(topic, data)
         flash(f'Keywords scheduled ,your id is { result.result() }, Please refresh this page in a few minutes'
                 ,category='info')
 
