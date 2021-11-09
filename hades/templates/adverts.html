@@ -10,8 +10,8 @@ Adverts list
     <thead>
     <tr>
         <!-- Your Columns HERE -->
-        <th scope="col">seller</th>
-        <th scope="col">Product</th>
+        <th scope="col">location</th>
+        <th scope="col" >Product</th>
         <th scope="col">Price</th>
         <th scope="col">Currency</th>
         <th scope="col">Options</th>
@@ -22,12 +22,13 @@ Adverts list
     <!-- Your rows inside the table HERE: -->
     {% for advert in advert_list %}
     <tr>
-        <td>{{ advert.seller }}</td>
-        <td>{{ advert.product }}</td>
+        <td>{{ advert.location }}</td>
+        <td style="width:400px; word-wrap:break-word; display:inline-block">{{ advert.title }}</td>
         <td>{{ advert.price }}</td>
-        <td>{{ advert.currency }}$</td>
+        <td>{{ advert.key.flat_path[1] }}</td>
         <td>
-            <button class="btn btn-outline btn-info">More Info</button>
+            <a class="btn btn-outline btn-info"" href="{{ url_for('register') }}">Info</a>
+
 
         </td>
     </tr>

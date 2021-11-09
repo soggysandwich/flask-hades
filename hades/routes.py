@@ -5,10 +5,13 @@ from hades.model import Advert, User
 from hades.forms import RegisterForm, KeywordsForm, LoginForm
 from flask_login import login_user,logout_user, login_required
 from google.cloud import pubsub_v1
+from google.cloud import datastore
 import json
 
 credential_path= '/home/me/Projects/flask-hades/hades/scripts/hades-privatekey-publisher-serviceaccount.json'
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = credential_path
+
+
 
 @app.route('/')
 @app.route('/home')
@@ -58,8 +61,14 @@ def login():
 @app.route('/adverts')
 @login_required
 def list_adverts():
-    advert_list = Advert.query.all()
-    return render_template('adverts.html', advert_list=advert_list)
+
+    #advert_list = Advert.query.all()
+    client=datastore.Client()
+    adverts_query=client.query(kind="ebay-adverts")
+    adverts=list(adverts_query.fetch(limit=20))
+    print(adverts[0].key.flat_path[1])
+
+    return render_template('adverts.html', advert_list=adverts)
 
 
 @app.route('/keywords',methods=["GET", "POST"])

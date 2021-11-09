@@ -1,6 +1,6 @@
 from hades import db, bcrypt, login_manager
 from flask_login import UserMixin
-
+from datastore_entity import DatastoreEntity,EntityValue
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -28,15 +28,30 @@ class User(db.Model, UserMixin):
 class Seller(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
     seller_name = db.Column(db.String(length=100), nullable=False)
-    adverts = db.relationship('Advert', backref='advert_seller', lazy=True)
+    #adverts = db.relationship('Advert', backref='advert_seller', lazy=True)
 
 
-class Advert(db.Model):
+class Advert(DatastoreEntity):
+    """
     id = db.Column(db.Integer(), primary_key=True)
     product = db.Column(db.String(length=500), nullable=False)
     price = db.Column(db.Integer())
     currency = db.Column(db.String(length=3))
     advertiser = db.Column(db.Integer(), db.ForeignKey('seller.id'))
 
+    """
+
+    title=EntityValue(None)
+    price=EntityValue(None)
+    currency=EntityValue(None)
+    country=EntityValue(None)
+    found_date=EntityValue(None)
+    location=EntityValue(None)
+
+    # name of entity's kind
+    __kind__ = "ebay-adverts"
+
     def __repr__(self):
-        return f'Advert {self.product}'
+        return f'Advert {self.title}'
+
+
