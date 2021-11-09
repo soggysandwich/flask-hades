@@ -10,10 +10,10 @@ Adverts list
     <thead>
     <tr>
         <!-- Your Columns HERE -->
-        <th scope="col">location</th>
+
         <th scope="col" >Product</th>
         <th scope="col">Price</th>
-        <th scope="col">Currency</th>
+        <th scope="col" >Location</th>
         <th scope="col">Options</th>
 
     </tr>
@@ -21,14 +21,23 @@ Adverts list
     <tbody>
     <!-- Your rows inside the table HERE: -->
     {% for advert in advert_list %}
+    {% include 'includes/advert_modal.html' %}
     <tr>
-        <td>{{ advert.location }}</td>
-        <td style="width:400px; word-wrap:break-word; display:inline-block">{{ advert.title }}</td>
-        <td>{{ advert.price }}</td>
-        <td>{{ advert.key.flat_path[1] }}</td>
-        <td>
-            <a class="btn btn-outline btn-info"" href="{{ url_for('register') }}">Info</a>
 
+        <td style="width:500px; word-wrap:break-word; display:inline-block">
+            <a href="{{ advert.viewItemURL }}">
+                {{ advert.title }}
+            </a>
+        </td>
+        <td>{{ advert.price }}</td>
+        <td >{{ advert.location}}</td>
+        <td>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#advertModal{{ advert.key.flat_path[1] }}">
+              More Info
+            </button>
+            <button type="button" class="btn btn-secondary" >
+              Investigate
+            </button>
 
         </td>
     </tr>
